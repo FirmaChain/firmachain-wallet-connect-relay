@@ -1,12 +1,8 @@
-import * as dotenv from 'dotenv';
-
 import { NextFunction, RequestHandler, Response } from 'express';
 import { HttpException } from '../exceptions/httpException';
 import { UNAUTHORIZATION } from '../constants/httpResult';
 
 import { decryptJSONData } from '../utils/crypto';
-
-dotenv.config();
 
 const projectAuthMiddleware = (): RequestHandler => {
   return (req: any, res: Response, next: NextFunction) => {

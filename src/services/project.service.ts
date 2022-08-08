@@ -4,6 +4,8 @@ import StoreService from './store.service';
 
 import { encryptData, encryptJSONData, decryptData } from '../utils/crypto';
 
+const REQUEST_EXPIRE_SECOND = Number.parseInt(process.env.REQUEST_EXPIRE_SECOND!);
+
 class ProjectService {
   constructor(public storeService: StoreService) {}
 
@@ -59,7 +61,7 @@ class ProjectService {
   }
 
   private async addRequestQueue(key: string, obj: Object): Promise<void> {
-    await this.storeService.setMessage(key, JSON.stringify(obj), 60);
+    await this.storeService.setMessage(key, JSON.stringify(obj), REQUEST_EXPIRE_SECOND);
   }
 }
 
