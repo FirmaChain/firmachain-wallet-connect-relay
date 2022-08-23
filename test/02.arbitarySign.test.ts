@@ -329,6 +329,7 @@ describe('[02. Arbitary Sign Test]', () => {
           expect(response.data.result.signParams.message).to.not.be.undefined;
           expect(response.data.result.signParams.signer).to.not.be.undefined;
           expect(response.data.result.signParams.type).to.not.be.undefined;
+          expect(response.data.result.signParams.argument).to.not.be.undefined;
           expect(response.data.result.projectMetaData).to.not.be.undefined;
           expect(response.data.result.projectMetaData.projectId).to.not.be.undefined;
           expect(response.data.result.projectMetaData.name).to.not.be.undefined;
@@ -358,7 +359,9 @@ describe('[02. Arbitary Sign Test]', () => {
           expect(response.data.result).to.not.be.undefined;
           expect(response.data.result.signParams).to.not.be.undefined;
           expect(response.data.result.signParams.message).to.not.be.undefined;
-
+          expect(response.data.result.signParams.signer).to.not.be.undefined;
+          expect(response.data.result.signParams.type).to.not.be.undefined;
+          expect(response.data.result.signParams.argument).to.not.be.undefined;
           expect(response.data.result.projectMetaData).to.not.be.undefined;
           expect(response.data.result.projectMetaData.projectId).to.not.be.undefined;
           expect(response.data.result.projectMetaData.name).to.not.be.undefined;

@@ -28,7 +28,7 @@ class WalletService {
   }
 
   public async getRequestData(requestKey: string): Promise<{
-    signParams: { message: string; info: string; signer: string; type: string };
+    signParams: { message: string; info: string; argument: object; signer: string; type: string };
     projectMetaData: { projectId: string; name: string; description: string; icon: string; url: string };
   }> {
     try {
@@ -39,6 +39,7 @@ class WalletService {
         signParams: {
           message: requestQueueData.message,
           info: requestQueueData.info,
+          argument: requestQueueData.argument,
           signer: requestQueueData.signer,
           type: requestQueueData.type,
         },

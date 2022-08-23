@@ -27,14 +27,17 @@ class ProjectService {
     type: number,
     signer: string,
     message: string,
-    info: string
+    info: string,
+    argument: any
   ): Promise<{ data: string }> {
     try {
       const requestKey = this.generateRequestId();
       const requestId = this.getEncryptRequestKey(requestKey);
       const api = 'sign';
 
-      await this.addRequestQueue(requestKey, { requestId, projectId, api, message, info, type, signer });
+      argument = argument === undefined ? {} : argument;
+
+      await this.addRequestQueue(requestKey, { requestId, projectId, api, message, info, argument, type, signer });
 
       return {
         data: `${api}://${requestKey}`,

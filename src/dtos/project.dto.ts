@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class ProjectAuthDto {
   @IsString()
@@ -17,4 +17,8 @@ export class NewSignDto {
 
   @IsString()
   public info: string;
+
+  @IsOptional()
+  @IsObject()
+  public argument: object;
 }

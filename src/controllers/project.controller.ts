@@ -24,10 +24,10 @@ class ProjectController {
   };
 
   public newSignRequest = (req: Request, res: Response): void => {
-    const { projectId, type, signer, message, info } = req.body;
+    const { projectId, type, signer, message, info, argument } = req.body;
 
     this.projectService
-      .newSignRequest(projectId, type, signer, message, info)
+      .newSignRequest(projectId, type, signer, message, info, argument)
       .then((result) => {
         resultLog(result);
         res.send({ ...SUCCESS, result });

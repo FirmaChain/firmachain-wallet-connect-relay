@@ -104,12 +104,12 @@ describe('[03. Direct Sign Test]', () => {
     });
   });
 
-  describe('[Dapp] Generate arbitary sign QR', () => {
+  describe('[Dapp] Generate direct sign QR', () => {
     it('[POST] /v1/projects/sign (success user1)', (done) => {
       axios
         .post(
           `/v1/projects/sign`,
-          { type: 0, signer: connect1.userAddress, message: connect1.message, info: 'Test1' },
+          { type: 0, signer: connect1.userAddress, message: connect1.message, info: 'Test1', argument: { test: 1 } },
           { headers: { authorization: `Bearer ${projectKey}` } }
         )
         .then((response) => {
@@ -132,7 +132,7 @@ describe('[03. Direct Sign Test]', () => {
       axios
         .post(
           `/v1/projects/sign`,
-          { type: 0, signer: connect2.userAddress, message: connect2.message, info: 'Test1' },
+          { type: 0, signer: connect2.userAddress, message: connect2.message, info: 'Test1', argument: { test: 2 } },
           { headers: { authorization: `Bearer ${projectKey}` } }
         )
         .then((response) => {
@@ -182,7 +182,7 @@ describe('[03. Direct Sign Test]', () => {
           expect(response.data.result.signParams.message).to.not.be.undefined;
           expect(response.data.result.signParams.signer).to.not.be.undefined;
           expect(response.data.result.signParams.type).to.not.be.undefined;
-
+          expect(response.data.result.signParams.argument).to.not.be.undefined;
           expect(response.data.result.projectMetaData).to.not.be.undefined;
           expect(response.data.result.projectMetaData.projectId).to.not.be.undefined;
           expect(response.data.result.projectMetaData.name).to.not.be.undefined;
@@ -194,6 +194,7 @@ describe('[03. Direct Sign Test]', () => {
           expect(response.data.result.signParams.signer).to.be.equal(connect1.userAddress);
           expect(response.data.result.signParams.type).to.be.equal(0);
           expect(response.data.result.projectMetaData.projectId).to.be.equal(projectId);
+          expect(response.data.result.signParams.argument.test).to.be.equal(1);
 
           done();
         })
@@ -215,6 +216,7 @@ describe('[03. Direct Sign Test]', () => {
           expect(response.data.result.signParams.message).to.not.be.undefined;
           expect(response.data.result.signParams.signer).to.not.be.undefined;
           expect(response.data.result.signParams.type).to.not.be.undefined;
+          expect(response.data.result.signParams.argument).to.not.be.undefined;
           expect(response.data.result.projectMetaData).to.not.be.undefined;
           expect(response.data.result.projectMetaData.projectId).to.not.be.undefined;
           expect(response.data.result.projectMetaData.name).to.not.be.undefined;
@@ -226,6 +228,7 @@ describe('[03. Direct Sign Test]', () => {
           expect(response.data.result.signParams.signer).to.be.equal(connect2.userAddress);
           expect(response.data.result.signParams.type).to.be.equal(0);
           expect(response.data.result.projectMetaData.projectId).to.be.equal(projectId);
+          expect(response.data.result.signParams.argument.test).to.be.equal(2);
 
           done();
         })
