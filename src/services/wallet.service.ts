@@ -7,6 +7,9 @@ import { SignData } from '../interfaces/wallet.interface';
 
 import { encryptJSONData, decryptJSONData } from '../utils/crypto';
 
+const REQUEST_PREFIX = process.env.REQUEST_PREFIX!;
+const PROJECT_PREFIX = process.env.PROJECT_PREFIX!;
+
 class WalletService {
   constructor(public storeService: StoreService) {}
 
@@ -88,7 +91,8 @@ class WalletService {
         signData,
       });
 
-      this.removeRequestQueueData(requestKey);
+      if (requestQueueData.isMultiple === undefined || requestQueueData.isMultiple === false)
+        this.removeRequestQueueData(requestKey);
 
       return { requestKey };
     } catch (error) {
@@ -109,7 +113,8 @@ class WalletService {
         type,
       });
 
-      this.removeRequestQueueData(requestKey);
+      if (requestQueueData.isMultiple === undefined || requestQueueData.isMultiple === false)
+        this.removeRequestQueueData(requestKey);
 
       return { requestKey };
     } catch (error) {
@@ -144,7 +149,7 @@ class WalletService {
   }
 
   private async getRequestQueueData(requestKey: string): Promise<any> {
-    const jsonString = await this.storeService.getMessage(requestKey);
+    const jsonString = await this.storeService.getMessage(`${REQUEST_PREFIX}${requestKey}`);
 
     if (jsonString === null) {
       throw new Error('INVALID DATA');
@@ -154,7 +159,7 @@ class WalletService {
   }
 
   private async removeRequestQueueData(requestKey: string): Promise<void> {
-    await this.storeService.removeMessage(requestKey);
+    await this.storeService.removeMessage(`${REQUEST_PREFIX}${requestKey}`);
   }
 
   private async getProjectInfo(projectId: string): Promise<{
@@ -165,7 +170,7 @@ class WalletService {
     icon: string;
     url: string;
   }> {
-    return await this.storeService.hgetAll(projectId);
+    return await this.storeService.hgetAll(`${PROJECT_PREFIX}${projectId}`);
   }
 
   private async projectVerifyRequest(uri: string, body: { requestKey: string; signature: string }) {

@@ -1,4 +1,4 @@
-import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class ProjectAuthDto {
   @IsString()
@@ -8,6 +8,10 @@ export class ProjectAuthDto {
 export class NewSignDto {
   @IsNumber()
   public type: number;
+
+  @IsOptional()
+  @IsBoolean()
+  public isMultiple: boolean;
 
   @IsString()
   public signer: string;

@@ -9,6 +9,18 @@ import { SUCCESS, INVALID_KEY, INTERNAL_ERROR } from '../constants/httpResult';
 class ProjectController {
   constructor(public storeService: StoreService, private projectService = new ProjectService(storeService)) {}
 
+  public getProjects = (req: Request, res: Response): void => {
+    this.projectService
+      .getProjects()
+      .then((result) => {
+        resultLog(result);
+        res.send({ ...SUCCESS, result });
+      })
+      .catch(() => {
+        res.send({ ...INVALID_KEY, result: {} });
+      });
+  };
+
   public newProjectKey = (req: Request, res: Response): void => {
     const { projectSecretKey } = req.body;
 
@@ -24,10 +36,10 @@ class ProjectController {
   };
 
   public newSignRequest = (req: Request, res: Response): void => {
-    const { projectId, type, signer, message, info, argument } = req.body;
+    const { projectId, type, isMultiple, signer, message, info, argument } = req.body;
 
     this.projectService
-      .newSignRequest(projectId, type, signer, message, info, argument)
+      .newSignRequest(projectId, type, isMultiple, signer, message, info, argument)
       .then((result) => {
         resultLog(result);
         res.send({ ...SUCCESS, result });

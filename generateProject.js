@@ -13,6 +13,8 @@ const salt = CryptoJS.enc.Hex.parse(process.env.SALT);
 const iv = CryptoJS.enc.Hex.parse(process.env.IV);
 const pass = process.env.SECRET_KEY;
 
+const PROJECT_PREFIX = process.env.PROJECT_PREFIX;
+
 const encryptData = (originalMessage) => {
   try {
     const key = CryptoJS.PBKDF2(pass, salt, {
@@ -54,12 +56,12 @@ client
       const projectId = uuid.v4();
       const projectSecretKey = encryptData(projectId);
 
-      await client.hSet(projectId, 'name', name);
-      await client.hSet(projectId, 'description', description);
-      await client.hSet(projectId, 'url', url);
-      await client.hSet(projectId, 'icon', icon);
-      await client.hSet(projectId, 'callback', callback);
-      await client.hSet(projectId, 'verifyRequest', verifyRequest);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'name', name);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'description', description);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'url', url);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'icon', icon);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'callback', callback);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'verifyRequest', verifyRequest);
 
       const projectData = {
         name,
@@ -70,7 +72,7 @@ client
         verifyRequest,
       };
 
-      const getProjectData = await client.hGetAll(projectId);
+      const getProjectData = await client.hGetAll(`${PROJECT_PREFIX}${projectId}`);
 
       for (let key in getProjectData) {
         if (projectData[key] !== getProjectData[key]) {

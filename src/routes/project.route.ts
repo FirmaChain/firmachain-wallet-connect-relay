@@ -20,6 +20,8 @@ class ProjectRoute implements Routes {
   }
 
   private initializeRoutes() {
+    this.router.get(`${this.path}`, this.projectController.getProjects);
+
     this.router.post(
       `${this.path}/auth`,
       validationMiddleware(ProjectAuthDto, 'body'),

@@ -27,6 +27,10 @@ class StoreService {
     return await this.client.hGetAll(key);
   }
 
+  public async keys(keys: string): Promise<string[]> {
+    return await this.client.keys(keys);
+  }
+
   private initialize(): void {
     this.client.on('error', (e) => {
       logger.error(e);
