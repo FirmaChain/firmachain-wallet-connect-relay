@@ -8,6 +8,7 @@
     "start": "ts-node src/server.ts",
     "build": "tsc",
     "new-project": "node generateProject.js",
+    "new-service": "node generateService.js",
     "new-word": "node generateWord.js"
   },
   "author": "",

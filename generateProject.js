@@ -50,6 +50,8 @@ client
       const description = readlineSync.question('input your project description : ');
       const url = readlineSync.question('input your project site URL : ');
       const icon = readlineSync.question('input your project icon URL : ');
+      const isDapp = readlineSync.question('input your project will be visible in station(true/false) : ');
+      const isServiceOnly = readlineSync.question('input your project will be service only(true/false) : ');
       const callback = readlineSync.question('input your project sign callback URL : ');
       const verifyRequest = readlineSync.question('input your project verify request URL : ');
 
@@ -62,12 +64,16 @@ client
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'icon', icon);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'callback', callback);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'verifyRequest', verifyRequest);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isDapp', isDapp);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isServiceOnly', isServiceOnly);
 
       const projectData = {
         name,
         description,
         url,
         icon,
+        isDapp,
+        isServiceOnly,
         callback,
         verifyRequest,
       };

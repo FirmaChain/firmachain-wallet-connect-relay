@@ -7,6 +7,7 @@ import { encryptData, encryptJSONData, decryptData } from '../utils/crypto';
 const REQUEST_EXPIRE_SECOND = Number.parseInt(process.env.REQUEST_EXPIRE_SECOND!);
 const REQUEST_PREFIX = process.env.REQUEST_PREFIX!;
 const PROJECT_PREFIX = process.env.PROJECT_PREFIX!;
+const SERVICE_PREFIX = process.env.SERVICE_PREFIX!;
 
 class ProjectService {
   constructor(public storeService: StoreService) {}
@@ -112,11 +113,19 @@ class ProjectService {
 
     for (let projectKey of projectKeys) {
       const projectInfo = await this.getProjectInfoByKey(projectKey);
+      const serviceList = await this.getServiceList(projectKey);
+
       const name = projectInfo.name;
       const description = projectInfo.description;
       const url = projectInfo.url;
       const icon = projectInfo.icon;
+      const isDapp = projectInfo.isDapp === 'true';
+      const isServiceOnly = projectInfo.isServiceOnly === 'true';
       const identity = projectKey.replace(PROJECT_PREFIX, '');
+
+      if (isDapp === false) {
+        continue;
+      }
 
       result.push({
         name,
@@ -124,6 +133,8 @@ class ProjectService {
         url,
         icon,
         identity,
+        isServiceOnly,
+        serviceList,
       });
     }
 
@@ -137,8 +148,30 @@ class ProjectService {
     description: string;
     icon: string;
     url: string;
+    isDapp: string;
+    isServiceOnly: string;
   }> {
     return await this.storeService.hgetAll(key);
+  }
+
+  private async getServiceList(key: string): Promise<
+    {
+      name: string;
+      url: string;
+      icon: string;
+    }[]
+  > {
+    const services = await this.storeService.hgetAll(`${SERVICE_PREFIX}${key.replace(PROJECT_PREFIX, '')}`);
+
+    console.log(`${SERVICE_PREFIX}${key}`);
+
+    let result: { name: string; url: string; icon: string }[] = [];
+    for (let serviceId in services) {
+      const serviceJSON = JSON.parse(services[serviceId]);
+      result.push(serviceJSON);
+    }
+
+    return result;
   }
 }
 
