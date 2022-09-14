@@ -63,10 +63,12 @@ class WalletService {
     try {
       const requestQueueData = await this.getRequestQueueData(requestKey);
       const projectInfo = await this.getProjectInfo(requestQueueData.projectId);
+      const signer = requestQueueData.signer;
 
       const response = await this.projectVerifyRequest(projectInfo.verifyRequest, {
         requestKey,
         signature,
+        signer,
       });
 
       const isValid = this.isValidVerifySignFromProject(response.data, requestKey, signature);
@@ -88,6 +90,7 @@ class WalletService {
         requestKey,
         api,
         type,
+        approve: true,
         signData,
       });
 
@@ -111,6 +114,7 @@ class WalletService {
         requestKey,
         api,
         type,
+        approve: false,
       });
 
       if (requestQueueData.isMultiple === undefined || requestQueueData.isMultiple === false)
@@ -173,7 +177,7 @@ class WalletService {
     return await this.storeService.hgetAll(`${PROJECT_PREFIX}${projectId}`);
   }
 
-  private async projectVerifyRequest(uri: string, body: { requestKey: string; signature: string }) {
+  private async projectVerifyRequest(uri: string, body: { requestKey: string; signature: string; signer: string }) {
     return await axios.post<{ requestKey: string; signature: string; isValid: boolean }>(uri, body);
   }
 
@@ -183,6 +187,7 @@ class WalletService {
       requestKey: string;
       api: string;
       type: number;
+      approve: boolean;
       signData?: any;
     }
   ) {
