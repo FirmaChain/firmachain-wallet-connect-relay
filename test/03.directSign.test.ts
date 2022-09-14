@@ -109,7 +109,14 @@ describe('[03. Direct Sign Test]', () => {
       axios
         .post(
           `/v1/projects/sign`,
-          { type: 0, signer: connect1.userAddress, message: connect1.message, info: 'Test1', argument: { test: 1 } },
+          {
+            qrType: 0,
+            type: 0,
+            signer: connect1.userAddress,
+            message: connect1.message,
+            info: 'Test1',
+            argument: { test: 1 },
+          },
           { headers: { authorization: `Bearer ${projectKey}` } }
         )
         .then((response) => {
@@ -132,7 +139,14 @@ describe('[03. Direct Sign Test]', () => {
       axios
         .post(
           `/v1/projects/sign`,
-          { type: 0, signer: connect2.userAddress, message: connect2.message, info: 'Test1', argument: { test: 2 } },
+          {
+            qrType: 0,
+            type: 0,
+            signer: connect2.userAddress,
+            message: connect2.message,
+            info: 'Test1',
+            argument: { test: 2 },
+          },
           { headers: { authorization: `Bearer ${projectKey}` } }
         )
         .then((response) => {

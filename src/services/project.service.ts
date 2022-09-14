@@ -40,6 +40,7 @@ class ProjectService {
 
   public async newSignRequest(
     projectId: string,
+    qrType: number,
     type: number,
     isMultiple: boolean,
     signer: string,
@@ -56,6 +57,7 @@ class ProjectService {
 
       await this.addRequestQueue(requestKey, isMultiple, {
         requestId,
+        qrType,
         projectId,
         isMultiple,
         api,

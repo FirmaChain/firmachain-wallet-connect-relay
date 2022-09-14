@@ -9,6 +9,9 @@ export class NewSignDto {
   @IsNumber()
   public type: number;
 
+  @IsNumber()
+  public qrType: number;
+
   @IsOptional()
   @IsBoolean()
   public isMultiple: boolean;

@@ -207,7 +207,7 @@ describe('[02. Arbitary Sign Test]', () => {
       axios
         .post(
           `/v1/projects/sign`,
-          { message: connect1.message, info: 'Test1', type: 0, signer: '' },
+          { message: connect1.message, info: 'Test1', qrType: 0, type: 0, signer: '' },
           { headers: { authorization: `Bearer ${projectKey}` } }
         )
         .then((response) => {
@@ -230,7 +230,7 @@ describe('[02. Arbitary Sign Test]', () => {
       axios
         .post(
           `/v1/projects/sign`,
-          { message: connect2.message, info: 'Test2', type: 0, signer: '' },
+          { message: connect2.message, info: 'Test2', qrType: 0, type: 0, signer: '' },
           { headers: { authorization: `Bearer ${projectKey}` } }
         )
         .then((response) => {

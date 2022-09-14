@@ -31,6 +31,7 @@ class WalletService {
   }
 
   public async getRequestData(requestKey: string): Promise<{
+    qrType: number;
     signParams: { message: string; info: string; argument: object; signer: string; type: string };
     projectMetaData: { projectId: string; name: string; description: string; icon: string; url: string };
   }> {
@@ -39,6 +40,7 @@ class WalletService {
       const projectInfo = await this.getProjectInfo(requestQueueData.projectId);
 
       return {
+        qrType: requestQueueData.qrType,
         signParams: {
           message: requestQueueData.message,
           info: requestQueueData.info,
