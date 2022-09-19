@@ -54,6 +54,9 @@ client
       const isServiceOnly = readlineSync.question('input your project will be service only(true/false) : ');
       const callback = readlineSync.question('input your project sign callback URL : ');
       const verifyRequest = readlineSync.question('input your project verify request URL : ');
+      const symbol = readlineSync.question('input your project Token symbol : ');
+      const denom = readlineSync.question('input your project Token denom : ');
+      const decimal = readlineSync.question('input your project Token decimal : ');
 
       const projectId = uuid.v4();
       const projectSecretKey = encryptData(projectId);
@@ -66,6 +69,10 @@ client
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'verifyRequest', verifyRequest);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isDapp', isDapp);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isServiceOnly', isServiceOnly);
+
+      if (tokenSymbol && tokenDenom && tokenDecimal) {
+        await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'token', JSON.stringify({ symbol, denom, decimal }));
+      }
 
       const projectData = {
         name,

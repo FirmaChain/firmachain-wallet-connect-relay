@@ -124,6 +124,7 @@ class ProjectService {
       const isDapp = projectInfo.isDapp === 'true';
       const isServiceOnly = projectInfo.isServiceOnly === 'true';
       const identity = projectKey.replace(PROJECT_PREFIX, '');
+      const token = projectInfo.token ? JSON.parse(projectInfo.token) : null;
 
       if (isDapp === false) {
         continue;
@@ -137,6 +138,7 @@ class ProjectService {
         identity,
         isServiceOnly,
         serviceList,
+        token,
       });
     }
 
@@ -152,6 +154,7 @@ class ProjectService {
     url: string;
     isDapp: string;
     isServiceOnly: string;
+    token: string;
   }> {
     return await this.storeService.hgetAll(key);
   }
