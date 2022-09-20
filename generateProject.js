@@ -70,7 +70,7 @@ client
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isDapp', isDapp);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isServiceOnly', isServiceOnly);
 
-      if (tokenSymbol && tokenDenom && tokenDecimal) {
+      if (symbol && denom && decimal) {
         await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'token', JSON.stringify({ symbol, denom, decimal }));
       }
 
