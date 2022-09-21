@@ -170,11 +170,14 @@ class ProjectService {
 
     console.log(`${SERVICE_PREFIX}${key}`);
 
-    let result: { name: string; url: string; icon: string }[] = [];
+    let result: { serviceId: string; name: string; url: string; icon: string }[] = [];
     for (let serviceId in services) {
-      const serviceJSON = JSON.parse(services[serviceId]);
+      let serviceJSON = JSON.parse(services[serviceId]);
+      serviceJSON.serviceId = serviceId;
       result.push(serviceJSON);
     }
+
+    result.sort((a, b) => (a.serviceId > b.serviceId ? 1 : -1));
 
     return result;
   }
