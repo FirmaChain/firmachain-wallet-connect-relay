@@ -125,6 +125,7 @@ class ProjectService {
       const isServiceOnly = projectInfo.isServiceOnly === 'true';
       const identity = projectKey.replace(PROJECT_PREFIX, '');
       const token = projectInfo.token ? JSON.parse(projectInfo.token) : null;
+      const order = projectInfo.order ? Number(projectInfo.order) : -1;
 
       if (isDapp === false) {
         continue;
@@ -139,8 +140,11 @@ class ProjectService {
         isServiceOnly,
         serviceList,
         token,
+        order,
       });
     }
+
+    result.sort((a, b) => b.order - a.order);
 
     return result;
   }
@@ -155,6 +159,7 @@ class ProjectService {
     isDapp: string;
     isServiceOnly: string;
     token: string;
+    order: number;
   }> {
     return await this.storeService.hgetAll(key);
   }
