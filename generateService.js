@@ -31,7 +31,7 @@ client
         name,
         url,
         icon,
-        isExternalBrowser,
+        isExternalBrowser: isExternalBrowser === 'true',
       };
 
       await client.hSet(`${SERVICE_PREFIX}${projectId}`, serviceId, JSON.stringify(serviceData));
