@@ -196,7 +196,9 @@ class ProjectService {
 
       if (serviceJSON.isExternalBrowser === undefined) {
         serviceJSON.isExternalBrowser = false;
-      } else result.push(serviceJSON);
+      }
+
+      result.push(serviceJSON);
     }
 
     result.sort((a, b) => (a.serviceId > b.serviceId ? 1 : -1));
