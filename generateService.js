@@ -24,12 +24,14 @@ client
       const name = readlineSync.question('input your service name : ');
       const url = readlineSync.question('input your service site URL : ');
       const icon = readlineSync.question('input your service icon URL : ');
+      const isExternalBrowser = readlineSync.question('your service is external browser : ');
 
       const serviceId = uuid.v4();
       const serviceData = {
         name,
         url,
         icon,
+        isExternalBrowser,
       };
 
       await client.hSet(`${SERVICE_PREFIX}${projectId}`, serviceId, JSON.stringify(serviceData));

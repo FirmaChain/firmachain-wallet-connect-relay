@@ -50,6 +50,7 @@ client
       const description = readlineSync.question('input your project description : ');
       const url = readlineSync.question('input your project site URL : ');
       const icon = readlineSync.question('input your project icon URL : ');
+      const order = readlineSync.question('input your project order index : ');
       const isDapp = readlineSync.question('input your project will be visible in station(true/false) : ');
       const isServiceOnly = readlineSync.question('input your project will be service only(true/false) : ');
       const callback = readlineSync.question('input your project sign callback URL : ');
@@ -69,6 +70,7 @@ client
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'verifyRequest', verifyRequest);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isDapp', isDapp);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isServiceOnly', isServiceOnly);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'order', order);
 
       if (symbol && denom && decimal) {
         await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'token', JSON.stringify({ symbol, denom, decimal }));

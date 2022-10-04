@@ -125,7 +125,7 @@ class ProjectService {
       const isServiceOnly = projectInfo.isServiceOnly === 'true';
       const identity = projectKey.replace(PROJECT_PREFIX, '');
       const token = projectInfo.token ? JSON.parse(projectInfo.token) : null;
-      const order = projectInfo.order ? Number(projectInfo.order) : -1;
+      const order = this.convertOrderNumber(projectInfo.order);
 
       if (isDapp === false) {
         continue;
@@ -149,6 +149,18 @@ class ProjectService {
     return result;
   }
 
+  private convertOrderNumber(order: any) {
+    let result = -1;
+
+    if (order) {
+      if (isNaN(Number(order)) === false) {
+        result = Number(order);
+      }
+    }
+
+    return result;
+  }
+
   private async getProjectInfoByKey(key: string): Promise<{
     callback: string;
     verifyRequest: string;
@@ -166,19 +178,28 @@ class ProjectService {
 
   private async getServiceList(key: string): Promise<
     {
+      serviceId: string;
       name: string;
       url: string;
       icon: string;
+      isExternalBrowser: boolean;
     }[]
   > {
     const services = await this.storeService.hgetAll(`${SERVICE_PREFIX}${key.replace(PROJECT_PREFIX, '')}`);
 
     console.log(`${SERVICE_PREFIX}${key}`);
 
-    let result: { serviceId: string; name: string; url: string; icon: string }[] = [];
+    let result: { serviceId: string; name: string; url: string; icon: string; isExternalBrowser: boolean }[] = [];
     for (let serviceId in services) {
       let serviceJSON = JSON.parse(services[serviceId]);
       serviceJSON.serviceId = serviceId;
+
+      if (serviceJSON.isExternalBrowser === undefined) {
+        serviceJSON.isExternalBrowser = false;
+      } else {
+        serviceJSON.isExternalBrowser = serviceJSON.isExternalBrowser === 'true';
+      }
+
       result.push(serviceJSON);
     }
 
