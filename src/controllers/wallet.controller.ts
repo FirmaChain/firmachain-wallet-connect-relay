@@ -25,6 +25,20 @@ class WalletController {
       });
   };
 
+  public getDappQRData = (req: Request, res: Response): void => {
+    const { requestKey } = req.params;
+
+    this.walletService
+      .getDappQRData(requestKey)
+      .then((result) => {
+        resultLog(result);
+        res.send({ ...SUCCESS, result });
+      })
+      .catch((err) => {
+        res.send({ ...INVALID_KEY, result: {} });
+      });
+  };
+
   public getRequestData = (req: Request, res: Response): void => {
     const { requestKey } = req.params;
 

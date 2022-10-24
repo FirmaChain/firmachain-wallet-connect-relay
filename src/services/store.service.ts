@@ -23,6 +23,10 @@ class StoreService {
     await this.client.del(key);
   }
 
+  public async hget(key: string, field: string): Promise<any> {
+    return await this.client.hGet(key, field);
+  }
+
   public async hgetAll(key: string): Promise<any> {
     return await this.client.hGetAll(key);
   }

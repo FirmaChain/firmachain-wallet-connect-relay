@@ -21,6 +21,20 @@ class ProjectController {
       });
   };
 
+  public getService = (req: Request, res: Response): void => {
+    const { projectId, serviceId } = req.params;
+
+    this.projectService
+      .getService(projectId, serviceId)
+      .then((result) => {
+        resultLog(result);
+        res.send({ ...SUCCESS, result });
+      })
+      .catch(() => {
+        res.send({ ...INVALID_KEY, result: {} });
+      });
+  };
+
   public newProjectKey = (req: Request, res: Response): void => {
     const { projectSecretKey } = req.body;
 

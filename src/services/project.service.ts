@@ -12,13 +12,54 @@ const SERVICE_PREFIX = process.env.SERVICE_PREFIX!;
 class ProjectService {
   constructor(public storeService: StoreService) {}
 
-  public async getProjects(): Promise<any> {
+  public async getProjects(): Promise<{
+    projectList: {
+      name: string;
+      description: string;
+      url: string;
+      icon: string;
+      identity: string;
+      isServiceOnly: boolean;
+      serviceList: {
+        serviceId: string;
+        name: string;
+        url: string;
+        icon: string;
+        isExternalBrowser: boolean;
+      }[];
+      token: {
+        symbol: string;
+        denom: string;
+        decimal: number;
+      };
+      order: number;
+    }[];
+  }> {
     try {
       const projectList = await this.getProjectList();
 
-      return {
-        projectList,
-      };
+      return { projectList };
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  public async getService(
+    projectId: string,
+    serviceId: string
+  ): Promise<{
+    service: {
+      serviceId: string;
+      name: string;
+      url: string;
+      icon: string;
+      isExternalBrowser: boolean;
+    };
+  }> {
+    try {
+      const service = await this.getServiceById(projectId, serviceId);
+      return { service };
     } catch (error) {
       console.log(error);
       throw error;
@@ -30,9 +71,7 @@ class ProjectService {
       const projectId = this.getDecryptProjectId(projectSecretKey);
       const projectKey = this.getEncryptProjectKey(projectId);
 
-      return {
-        projectKey,
-      };
+      return { projectKey };
     } catch (error) {
       throw error;
     }
@@ -68,9 +107,7 @@ class ProjectService {
         signer,
       });
 
-      return {
-        data: `${api}://${requestKey}`,
-      };
+      return { data: `${api}://${requestKey}` };
     } catch (error) {
       throw error;
     }
@@ -107,6 +144,20 @@ class ProjectService {
       url: string;
       icon: string;
       identity: string;
+      isServiceOnly: boolean;
+      serviceList: {
+        serviceId: string;
+        name: string;
+        url: string;
+        icon: string;
+        isExternalBrowser: boolean;
+      }[];
+      token: {
+        symbol: string;
+        denom: string;
+        decimal: number;
+      };
+      order: number;
     }[]
   > {
     const projectKeys = await this.storeService.keys(`${PROJECT_PREFIX}*`);
@@ -204,6 +255,28 @@ class ProjectService {
     result.sort((a, b) => (a.serviceId > b.serviceId ? 1 : -1));
 
     return result;
+  }
+
+  private async getServiceById(
+    projectId: string,
+    serviceId: string
+  ): Promise<{
+    serviceId: string;
+    name: string;
+    url: string;
+    icon: string;
+    isExternalBrowser: boolean;
+  }> {
+    const services = await this.storeService.hget(`${SERVICE_PREFIX}${projectId}`, serviceId);
+
+    let serviceJSON = JSON.parse(services);
+    serviceJSON.serviceId = serviceId;
+
+    if (serviceJSON.isExternalBrowser === undefined) {
+      serviceJSON.isExternalBrowser = false;
+    }
+
+    return serviceJSON;
   }
 }
 

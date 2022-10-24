@@ -22,6 +22,8 @@ class ProjectRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, this.projectController.getProjects);
 
+    this.router.get(`${this.path}/dapps/:projectId/services/:serviceId`, this.projectController.getService);
+
     this.router.post(
       `${this.path}/auth`,
       validationMiddleware(ProjectAuthDto, 'body'),

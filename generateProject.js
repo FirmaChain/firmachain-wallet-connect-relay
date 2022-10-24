@@ -89,7 +89,7 @@ client
 
       const getProjectData = await client.hGetAll(`${PROJECT_PREFIX}${projectId}`);
 
-      for (let key in getProjectData) {
+      for (let key in projectData) {
         if (projectData[key] !== getProjectData[key]) {
           throw new Error('FAILED NEW PROJECT');
         }

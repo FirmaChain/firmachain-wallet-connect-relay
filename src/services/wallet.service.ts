@@ -9,6 +9,8 @@ import { encryptJSONData, decryptJSONData } from '../utils/crypto';
 
 const REQUEST_PREFIX = process.env.REQUEST_PREFIX!;
 const PROJECT_PREFIX = process.env.PROJECT_PREFIX!;
+const SERVICE_PREFIX = process.env.SERVICE_PREFIX!;
+const SERVICE_ADD_PREFIX = process.env.SERVICE_ADD_PREFIX!;
 
 class WalletService {
   constructor(public storeService: StoreService) {}
@@ -25,6 +27,43 @@ class WalletService {
       } else {
         throw new Error('INVALID');
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getDappQRData(requestKey: string): Promise<{
+    project: {
+      projectId: string;
+      name: string;
+      icon: string;
+    };
+    service: {
+      serviceId: string;
+      name: string;
+      icon: string;
+    };
+  }> {
+    try {
+      const serviceAddData = await this.getServiceAddData(requestKey);
+      const projectId = serviceAddData.projectId;
+      const serviceId = serviceAddData.serviceId;
+
+      const projectInfo = await this.getProjectInfoById(projectId);
+      const serviceInfo = await this.getServiceById(projectId, serviceId);
+
+      return {
+        project: {
+          projectId: projectId,
+          name: projectInfo.name,
+          icon: projectInfo.icon,
+        },
+        service: {
+          serviceId: serviceId,
+          name: serviceInfo.name,
+          icon: serviceInfo.icon,
+        },
+      };
     } catch (error) {
       throw error;
     }
@@ -154,6 +193,16 @@ class WalletService {
     return isValid;
   }
 
+  private async getServiceAddData(requestKey: string): Promise<{ projectId: string; serviceId: string }> {
+    const jsonString = await this.storeService.hget(`${SERVICE_ADD_PREFIX}`, requestKey);
+
+    if (jsonString === null) {
+      throw new Error('INVALID DATA');
+    }
+
+    return JSON.parse(jsonString);
+  }
+
   private async getRequestQueueData(requestKey: string): Promise<any> {
     const jsonString = await this.storeService.getMessage(`${REQUEST_PREFIX}${requestKey}`);
 
@@ -181,6 +230,43 @@ class WalletService {
 
   private async projectVerifyRequest(uri: string, body: { requestKey: string; signature: string; signer: string }) {
     return await axios.post<{ requestKey: string; signature: string; isValid: boolean }>(uri, body);
+  }
+
+  private async getProjectInfoById(key: string): Promise<{
+    callback: string;
+    verifyRequest: string;
+    name: string;
+    description: string;
+    icon: string;
+    url: string;
+    isDapp: string;
+    isServiceOnly: string;
+    token: string;
+    order: number;
+  }> {
+    return await this.storeService.hgetAll(`${PROJECT_PREFIX}${key}`);
+  }
+
+  private async getServiceById(
+    projectId: string,
+    serviceId: string
+  ): Promise<{
+    serviceId: string;
+    name: string;
+    url: string;
+    icon: string;
+    isExternalBrowser: boolean;
+  }> {
+    const services = await this.storeService.hget(`${SERVICE_PREFIX}${projectId}`, serviceId);
+
+    let serviceJSON = JSON.parse(services);
+    serviceJSON.serviceId = serviceId;
+
+    if (serviceJSON.isExternalBrowser === undefined) {
+      serviceJSON.isExternalBrowser = false;
+    }
+
+    return serviceJSON;
   }
 
   private projectCallback(

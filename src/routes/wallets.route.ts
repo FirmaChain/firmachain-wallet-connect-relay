@@ -27,6 +27,13 @@ class WalletRoute implements Routes {
     );
 
     this.router.get(
+      `${this.path}/dapp/:requestKey`,
+      walletAuthMiddleware(),
+      validationMiddleware(RequestDto, 'params'),
+      this.walletController.getDappQRData
+    );
+
+    this.router.get(
       `${this.path}/sign/:requestKey`,
       walletAuthMiddleware(),
       validationMiddleware(RequestDto, 'params'),
