@@ -25,6 +25,7 @@ client
       const url = readlineSync.question('input your service site URL : ');
       const icon = readlineSync.question('input your service icon URL : ');
       const isExternalBrowser = readlineSync.question('your service is external browser : ');
+      const isHidden = readlineSync.question('your service is hidden : ');
 
       const serviceId = uuid.v4();
       const serviceData = {
@@ -32,6 +33,7 @@ client
         url,
         icon,
         isExternalBrowser: isExternalBrowser === 'true',
+        isHidden: isHidden === 'true',
       };
 
       await client.hSet(`${SERVICE_PREFIX}${projectId}`, serviceId, JSON.stringify(serviceData));

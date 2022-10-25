@@ -243,6 +243,8 @@ class ProjectService {
     let result: { serviceId: string; name: string; url: string; icon: string; isExternalBrowser: boolean }[] = [];
     for (let serviceId in services) {
       let serviceJSON = JSON.parse(services[serviceId]);
+      if (serviceJSON.isHidden) continue;
+
       serviceJSON.serviceId = serviceId;
 
       if (serviceJSON.isExternalBrowser === undefined) {
