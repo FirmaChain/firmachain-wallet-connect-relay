@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import StoreService from './store.service';
 
 import { encryptData, encryptJSONData, decryptData } from '../utils/crypto';
+import { IProject } from '../interfaces/project.interface';
 
 const REQUEST_EXPIRE_SECOND = Number.parseInt(process.env.REQUEST_EXPIRE_SECOND!);
 const REQUEST_PREFIX = process.env.REQUEST_PREFIX!;
@@ -13,27 +14,7 @@ class ProjectService {
   constructor(public storeService: StoreService) {}
 
   public async getProjects(): Promise<{
-    projectList: {
-      name: string;
-      description: string;
-      url: string;
-      icon: string;
-      identity: string;
-      isServiceOnly: boolean;
-      serviceList: {
-        serviceId: string;
-        name: string;
-        url: string;
-        icon: string;
-        isExternalBrowser: boolean;
-      }[];
-      token: {
-        symbol: string;
-        denom: string;
-        decimal: number;
-      };
-      order: number;
-    }[];
+    projectList: IProject[];
   }> {
     try {
       const projectList = await this.getProjectList();
@@ -137,29 +118,7 @@ class ProjectService {
     }
   }
 
-  private async getProjectList(): Promise<
-    {
-      name: string;
-      description: string;
-      url: string;
-      icon: string;
-      identity: string;
-      isServiceOnly: boolean;
-      serviceList: {
-        serviceId: string;
-        name: string;
-        url: string;
-        icon: string;
-        isExternalBrowser: boolean;
-      }[];
-      token: {
-        symbol: string;
-        denom: string;
-        decimal: number;
-      };
-      order: number;
-    }[]
-  > {
+  private async getProjectList(): Promise<IProject[]> {
     const projectKeys = await this.storeService.keys(`${PROJECT_PREFIX}*`);
 
     let result = [];
@@ -173,6 +132,7 @@ class ProjectService {
       const url = projectInfo.url;
       const icon = projectInfo.icon;
       const isDapp = projectInfo.isDapp === 'true';
+      const isCertified = projectInfo.isCertified === 'true';
       const isServiceOnly = projectInfo.isServiceOnly === 'true';
       const identity = projectKey.replace(PROJECT_PREFIX, '');
       const token = projectInfo.token ? JSON.parse(projectInfo.token) : null;
@@ -188,6 +148,7 @@ class ProjectService {
         url,
         icon,
         identity,
+        isCertified,
         isServiceOnly,
         serviceList,
         token,
@@ -220,6 +181,7 @@ class ProjectService {
     icon: string;
     url: string;
     isDapp: string;
+    isCertified: string;
     isServiceOnly: string;
     token: string;
     order: number;
@@ -237,8 +199,6 @@ class ProjectService {
     }[]
   > {
     const services = await this.storeService.hgetAll(`${SERVICE_PREFIX}${key.replace(PROJECT_PREFIX, '')}`);
-
-    console.log(`${SERVICE_PREFIX}${key}`);
 
     let result: { serviceId: string; name: string; url: string; icon: string; isExternalBrowser: boolean }[] = [];
     for (let serviceId in services) {
