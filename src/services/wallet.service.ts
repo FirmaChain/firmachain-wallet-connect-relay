@@ -72,7 +72,14 @@ class WalletService {
   public async getRequestData(requestKey: string): Promise<{
     qrType: number;
     signParams: { message: string; info: string; argument: object; signer: string; type: string };
-    projectMetaData: { projectId: string; name: string; description: string; icon: string; url: string };
+    projectMetaData: {
+      projectId: string;
+      isCertified: boolean;
+      name: string;
+      description: string;
+      icon: string;
+      url: string;
+    };
   }> {
     try {
       const requestQueueData = await this.getRequestQueueData(requestKey);
@@ -89,6 +96,7 @@ class WalletService {
         },
         projectMetaData: {
           projectId: requestQueueData.projectId,
+          isCertified: projectInfo.isCertified === 'true',
           name: projectInfo.name,
           description: projectInfo.description,
           icon: projectInfo.icon,
@@ -224,6 +232,7 @@ class WalletService {
     description: string;
     icon: string;
     url: string;
+    isCertified: string;
   }> {
     return await this.storeService.hgetAll(`${PROJECT_PREFIX}${projectId}`);
   }
