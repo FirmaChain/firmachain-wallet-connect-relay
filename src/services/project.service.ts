@@ -134,6 +134,8 @@ class ProjectService {
       const isDapp = projectInfo.isDapp === 'true';
       const isCertified = projectInfo.isCertified === 'true';
       const isServiceOnly = projectInfo.isServiceOnly === 'true';
+      const cw721ContractAddress = projectInfo.cw721ContractAddress ? projectInfo.cw721ContractAddress : '';
+      const cw20ContractAddress = projectInfo.cw20ContractAddress ? projectInfo.cw20ContractAddress : '';
       const identity = projectKey.replace(PROJECT_PREFIX, '');
       const token = projectInfo.token ? JSON.parse(projectInfo.token) : null;
       const order = this.convertOrderNumber(projectInfo.order);
@@ -148,6 +150,8 @@ class ProjectService {
         url,
         icon,
         identity,
+        cw721ContractAddress,
+        cw20ContractAddress,
         isCertified,
         isServiceOnly,
         serviceList,
@@ -183,6 +187,8 @@ class ProjectService {
     isDapp: string;
     isCertified: string;
     isServiceOnly: string;
+    cw721ContractAddress: string;
+    cw20ContractAddress: string;
     token: string;
     order: number;
   }> {

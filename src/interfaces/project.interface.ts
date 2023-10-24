@@ -6,6 +6,8 @@ export interface IProject {
   identity: string;
   isCertified: boolean;
   isServiceOnly: boolean;
+  cw721ContractAddress: string;
+  cw20ContractAddress: string;
   serviceList: IService[];
   token: IToken;
   order: number;

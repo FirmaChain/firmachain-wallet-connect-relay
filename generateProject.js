@@ -53,6 +53,10 @@ client
       const order = readlineSync.question('input your project order index : ');
       const isDapp = readlineSync.question('input your project will be visible in station(true/false) : ');
       const isServiceOnly = readlineSync.question('input your project will be service only(true/false) : ');
+
+      const cw20ContractAddress = readlineSync.question('input your cosmwasm (CW20) Address : ');
+      const cw721ContractAddress = readlineSync.question('input your cosmwasm (CW721) Address : ');
+
       const callback = readlineSync.question('input your project sign callback URL : ');
       const verifyRequest = readlineSync.question('input your project verify request URL : ');
       const symbol = readlineSync.question('input your project Token symbol : ');
@@ -70,6 +74,8 @@ client
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'verifyRequest', verifyRequest);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isDapp', isDapp);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'isServiceOnly', isServiceOnly);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'cw20ContractAddress', cw20ContractAddress);
+      await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'cw721ContractAddress', cw721ContractAddress);
       await client.hSet(`${PROJECT_PREFIX}${projectId}`, 'order', order);
 
       if (symbol && denom && decimal) {
@@ -83,6 +89,8 @@ client
         icon,
         isDapp,
         isServiceOnly,
+        cw20ContractAddress,
+        cw721ContractAddress,
         callback,
         verifyRequest,
       };
