@@ -70,9 +70,9 @@ class App {
   private initializeMiddlewares(): void {
     this.app.use(Helmet());
     this.app.use(morganMiddleware);
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cookieParser('FIRMA'));
+    this.app.use(express.json({ limit: process.env.LIMIT_FILE }));
+    this.app.use(express.urlencoded({ extended: true, limit: process.env.LIMIT_FILE }));
+    this.app.use(cookieParser(process.env.COOKIE));
     this.app.use((req, res, next) => {
       res.header('Content-Type', 'application/json;charset=UTF-8');
       res.header('Access-Control-Allow-Credentials', 'true');
