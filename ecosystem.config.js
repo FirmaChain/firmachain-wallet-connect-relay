@@ -2,7 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'firmachain-wallet-connect-relay',
-      script: 'ts-node -r ./src/server.ts',
+      script: './src/server.ts',
+      interpreter: 'ts-node',
       instances: 1,
       exec_mode: 'fork',
       env: {
